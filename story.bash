@@ -5,9 +5,10 @@ if [[ $debug ]]; then
 fi
 
 declare -a packages=$( config list )
-only_build=$( config only_build )
+install=$( config install )
 user=$( config user )
 build_root_dir=$( config build_root )
+output_dir=$( config output )
 
 pacman -Sy --noconfirm --needed base-devel yajl git
 
@@ -19,10 +20,13 @@ for package in ${packages[@]}; do
   install -d -m 777 $build_root_dir/${package}
   su $user -s /bin/bash -c "git clone https://aur.archlinux.org/$package.git" 
   cd $build_root_dir/${package}
-  su $user -s /bin/bash -c "makepkg --noconfirm -s"
+  su $user -s /bin/bash -c "makepkg --noconfirm -s" || exit 11
+  package_name=$(find -iname "*.pkg.tar.xz" -type f)
+  mkdir -p $output_dir
+  mv $package_name ${output_dir}/
 
-  if [[ -z $only_build ]]; then
-    pacman -U --noconfirm ./*.pkg.tar.xz
+  if [[ $install == 'true' ]]; then
+    pacman -U --noconfirm ${output_dir}/${package_name}
   fi
 
   cd ..

@@ -11,14 +11,14 @@ Build packages from AUR for archlinux
 # USAGE
 ## Manually
     
-    # sparrow plg run aur-builder --param list="( zef )"
+    # sparrow plg run aur-builder --param list="( zef yaourt )"
 
 ## Via Sparrowdo
     
     $ cat sparrofile
 
     task_run 'install zef', 'aur-builder', %(
-      list => ( 'chef-dk' ),
+      list => ( 'chef-dk', 'yaourt' ),
       user => 'vagrant',
       build_root => '/home/vagrant/aur-build'
     );
@@ -26,6 +26,7 @@ Build packages from AUR for archlinux
     task_run 'install zef', 'aur-builder', %(
       list => ( 'zef' ),
       user => 'vagrant',
+      output => '/tmp/zef'
     );
 
 # Parameters
@@ -35,3 +36,7 @@ list of your packages. Required.
 ## user
 
 ## build_root
+
+## install
+
+## output
