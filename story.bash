@@ -17,7 +17,7 @@ cd $build_root_dir
 
 for package in ${packages[@]}; do
   rm -rf $build_root_dir/${package}
-  install -d -m 777 $build_root_dir/${package}
+  install -g $user -o $user -d -m 777 $build_root_dir/${package}
   su $user -s /bin/bash -c "git clone https://aur.archlinux.org/$package.git" 
   cd $build_root_dir/${package}
   su $user -s /bin/bash -c "makepkg --noconfirm -s" || exit 11
